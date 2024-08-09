@@ -1,0 +1,323 @@
+swagger: '2.0'
+info:
+  title: Order Management System
+  description: API for managing orders and products for an order management system.
+  version: 1.0.0
+host: localhost:8080
+basePath: /api
+schemes:
+  - http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /auth:
+    post:
+      summary: Authenticate a user.
+      description: This endpoint allows users to authenticate and receive a Bearer token.
+      operationId: authenticate
+      parameters:
+        - name: credentials
+          in: body
+          description: The user's credentials.
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        '401':
+          description: Unauthorized
+      tags:
+        - users
+  /orders:
+    post:
+      summary: Create a new order
+      description: Creates a new order with the specified products.
+      operationId: createOrder
+      tags:
+        - Orders
+      parameters:
+        - name: order
+          in: body
+          description: Order to be created
+          required: true
+          schema:
+            $ref: "#/definitions/OrderDto"
+      responses:
+        '202':
+          description: Order received and will be processed.
+          schema:
+            $ref: "#/definitions/OrderCreatedResponse"
+        '400':
+          description: Bad request if request is invalid.
+      security:
+        - Bearer: []
+    get:
+      summary: List all orders
+      description: Retrieves a list of all orders placed.
+      operationId: listOrders
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: Successfully retrieved the list of orders.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/OrderResponse'
+        '500':
+          description: Internal server error.
+      security:
+        - Bearer: []
+  /products:
+    post:
+      summary: Add a new product
+      description: Adds a new product to the product catalog.
+      operationId: addProduct
+      tags:
+        - Products
+      parameters:
+        - name: product
+          in: body
+          description: Product to be added
+          required: true
+          schema:
+            $ref: '#/definitions/ProductDto'
+      responses:
+        '201':
+          description: Product added successfully.
+          schema:
+            $ref: '#/definitions/ProductDto'
+        '400':
+          description: Bad request.
+      security:
+        - Bearer: []
+    get:
+      summary: List all products
+      description: Retrieves a list of all products.
+      operationId: listProducts
+      tags:
+        - Products
+      responses:
+        '200':
+          description: A list of products retrieved successfully.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProductDto'
+        '500':
+          description: Internal server error.
+      security:
+        - Bearer: []
+  /products/{productId}:
+    get:
+      summary: Get a product
+      description: Retrieves details of a specific product by its ID.
+      operationId: getProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Product details retrieved successfully.
+          schema:
+            $ref: '#/definitions/ProductDto'
+        '404':
+          description: Product not found.
+        '500':
+          description: Internal server error.
+      security:
+        - Bearer: []
+    put:
+      summary: Update a product
+      description: Updates an existing product's details.
+      operationId: updateProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product
+          type: integer
+          format: int64
+        - name: product
+          in: body
+          description: Product details to be updated
+          required: true
+          schema:
+            $ref: '#/definitions/ProductDto'
+      responses:
+        '200':
+          description: Product updated successfully.
+          schema:
+            $ref: '#/definitions/ProductDto'
+        '400':
+          description: Bad request.
+        '404':
+          description: Product not found.
+      security:
+        - Bearer: []
+    delete:
+      summary: Delete a product
+      description: Deletes a specific product from the catalog.
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: Product deleted successfully.
+        '404':
+          description: Product not found.
+      security:
+        - Bearer: []
+definitions:
+  Credentials:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        minLength: 8
+  OrderDto:
+    type: object
+    properties:
+      products:
+        type: array
+        description: List of products to be added to the order.
+        minItems: 1
+        items:
+          $ref: "#/definitions/OrderProductDto"
+    required:
+      - products
+  OrderCreatedResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Order processing started successfully.
+      orderId:
+        type: string
+        description: Unique identifier for tracking the order.
+  OrderResponse:
+    type: object
+    properties:
+      orderId:
+        type: string
+        description: Unique identifier for the created order.
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/OrderItem'
+      status:
+        type: string
+        readOnly: true
+        enum:
+          - PENDING
+          - SUCCESS
+          - FAILED
+      totalPrice:
+        type: number
+        format: double
+        description: Total price of the order.
+      errors:
+        type: array
+        description: Failures in creating the order if any.
+        items:
+          - $ref: '#/definitions/ValidationErrorDto'
+  ValidationErrorDto:
+    type: object
+    properties:
+      errorMessage:
+        type: string
+        description: the failure info.
+  OrderItem:
+    type: object
+    properties:
+      productId:
+        type: integer
+        format: int64
+        description: Unique identifier of the product.
+      productName:
+        type: string
+        description: Name of the product.
+      quantity:
+        type: integer
+        description: Quantity ordered.
+      pricePerUnit:
+        type: number
+        format: double
+        description: Price per unit of the product.
+      subtotal:
+        type: number
+        format: double
+        description: Subtotal price for the product (quantity * pricePerUnit).
+  ProductDto:
+    type: object
+    required:
+      - name
+      - price
+      - quantity
+    properties:
+      Id:
+        type: integer
+        format: int64
+        description: Unique identifier of the product.
+        readOnly: true
+      name:
+        type: string
+        description: Name of the product.
+      price:
+        type: number
+        format: double
+        description: Retail price of the product.
+        minimum: 1
+      quantity:
+        type: integer
+        description: Available stock quantity.
+        minimum: 1
+  OrderProductDto:
+    type: object
+    required:
+      - productName
+      - quantity
+    properties:
+      productName:
+        type: string
+        description: Product name.
+      quantity:
+        type: integer
+        description: Quantity of the product.
+        minimum: 1
+  LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: status message
+        accessToken:
+          type: string
+          description: the access token
