@@ -2,7 +2,6 @@ package com.qeema.practicaltest.ordermanagement.application.controllers;
 
 import java.util.List;
 
-import com.qeema.practicaltest.ordermanagement.domain.exceptions.OrderException;
 import lombok.SneakyThrows;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +24,7 @@ public class OrderDelegateImpl implements OrdersApiDelegate {
     @SneakyThrows
     @Override
     public ResponseEntity<OrderCreatedResponse> createOrder(OrderDto order) {
-        OrderCreatedResponse createdOrderResponse = null;
-        createdOrderResponse = orderService.createOrder(orderMapper.mapToEntity(order));
+        OrderCreatedResponse createdOrderResponse = orderService.createOrder(orderMapper.mapToEntity(order));
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderResponse);
     }
 

@@ -1,19 +1,15 @@
 package com.qeema.practicaltest.ordermanagement.domain.order.services;
 
 import java.util.*;
-
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
-import org.junit.jupiter.api.BeforeEach;
 import java.util.concurrent.CompletableFuture;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.CollectionUtils;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.qeema.practicaltest.ordermanagement.domain.order.entities.Order;
 import com.qeema.practicaltest.ordermanagement.domain.product.entities.Product;
 import com.qeema.practicaltest.ordermanagement.domain.exceptions.OrderException;
@@ -65,9 +61,7 @@ class OrderServiceTest {
 
         when(orderValidator.validate(order)).thenReturn(List.of(error));
 
-        OrderException exception = assertThrows(OrderException.class, () -> {
-            orderService.createOrder(order);
-        });
+        OrderException exception = assertThrows(OrderException.class, () -> orderService.createOrder(order));
 
         assertFalse(CollectionUtils.isEmpty(exception.getErrors()));
         verify(orderRepository, never()).save(any(Order.class));

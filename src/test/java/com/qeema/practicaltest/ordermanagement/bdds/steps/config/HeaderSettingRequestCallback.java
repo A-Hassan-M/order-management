@@ -1,6 +1,5 @@
 package com.qeema.practicaltest.ordermanagement.bdds.steps.config;
 
-import java.util.Map;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RequestCallback;

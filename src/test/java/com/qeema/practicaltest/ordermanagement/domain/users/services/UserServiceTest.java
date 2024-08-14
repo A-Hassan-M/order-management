@@ -10,10 +10,8 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import com.qeema.practicaltest.ordermanagement.domain.users.entities.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import com.qeema.practicaltest.ordermanagement.domain.users.repos.RoleRepository;
 import com.qeema.practicaltest.ordermanagement.domain.users.repos.UserRepository;
 import com.qeema.practicaltest.ordermanagement.infrastructure.utils.HashingAlgorithm;
 

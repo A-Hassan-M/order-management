@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 public class OrderStepDefinitions {
 
-    private String baseUrl = "http://localhost:8080/api";
+    private final String BASE_URL = "http://localhost:8080/api";
     private String accessToken;
     private Response response;
 
@@ -22,7 +22,7 @@ public class OrderStepDefinitions {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body("{ \"name\": \"" + name + "\", \"price\": " + price + ", \"quantity\": " + quantity + " }")
                 .when()
-                .post(baseUrl + "/products")
+                .post(BASE_URL + "/products")
                 .then().statusCode(201).extract().response();
     }
 
@@ -32,7 +32,7 @@ public class OrderStepDefinitions {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body("{ \"email\": \"" + email + "\", \"password\": \"" + password + "\" }")
-                .when().post(baseUrl + "/auth")
+                .when().post(BASE_URL + "/auth")
                 .then().statusCode(200).extract().response();
         accessToken = response.jsonPath().getString("accessToken");
     }
@@ -45,7 +45,7 @@ public class OrderStepDefinitions {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body(orderJson)
                 .when()
-                .post(baseUrl + "/orders");
+                .post(BASE_URL + "/orders");
     }
 
     @Then("the order is successfully created with status code {int}")
@@ -60,7 +60,7 @@ public class OrderStepDefinitions {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .get(baseUrl + "/orders");
+                .get(BASE_URL + "/orders");
     }
 
     @Then("the list of orders is retrieved with status code {int}")
