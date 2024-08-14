@@ -23,6 +23,11 @@ public class Order {
     @JoinColumn(name = "orderId")
     private List<ValidationError> errors;
 
+    public Order(String id, List<OrderProduct> orderItems) {
+        this.id = id;
+        this.orderItems = orderItems;
+    }
+
     public void calculateTotalPrice() {
         totalPrice = orderItems.stream().mapToDouble(OrderProduct::getSubtotal).sum();
     }

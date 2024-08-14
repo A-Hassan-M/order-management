@@ -1,21 +1,17 @@
 package com.qeema.practicaltest.ordermanagement.domain.order.services;
 
-import java.util.List;
-
-import com.qeema.practicaltest.ordermanagement.domain.order.repository.ValidationErrorRepository;
-import com.qeema.practicaltest.ordermanagement.domain.product.entities.Product;
-import lombok.RequiredArgsConstructor;
-import jakarta.transaction.Transactional;
-
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.scheduling.annotation.Async;
 import com.qeema.practicaltest.ordermanagement.domain.order.entities.Order;
+import com.qeema.practicaltest.ordermanagement.domain.product.entities.Product;
 import com.qeema.practicaltest.ordermanagement.infrastructure.utils.OrderUtils;
 import com.qeema.practicaltest.ordermanagement.domain.exceptions.OrderException;
 import com.qeema.practicaltest.ordermanagement.domain.order.entities.OrderStatus;
@@ -25,6 +21,7 @@ import com.qeema.practicaltest.ordermanagement.domain.order.entities.ValidationE
 import com.qeema.practicaltest.ordermanagement.domain.product.service.ProductService;
 import com.qeema.practicaltest.ordermanagement.domain.order.validation.OrderValidator;
 import com.qeema.practicaltest.ordermanagement.domain.order.repository.OrderRepository;
+import com.qeema.practicaltest.ordermanagement.domain.order.repository.ValidationErrorRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +44,10 @@ public class OrderService {
 
     @Async
     @Transactional
-    protected void fulfillOrder(Order order) {
-        CompletableFuture.runAsync(() -> {
+    protected CompletableFuture<Void> fulfillOrder(Order order) {
+        return CompletableFuture.runAsync(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -71,7 +68,7 @@ public class OrderService {
         });
     }
 
-    private List<OrderProduct> assignProductsData(Order order, List<OrderProduct> orderItems) {
+    public List<OrderProduct> assignProductsData(Order order, List<OrderProduct> orderItems) {
         List<Product> products = productService.getProducts(orderItems);
         Map<String, Product> productMap = products.stream().collect(Collectors.toMap(Product::getName, Function.identity()));
         orderItems.forEach(item -> {

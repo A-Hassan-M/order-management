@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+  order-management:
+    build:
+      context: ../order-management
+      dockerfile: Dockerfile
+    container_name: 'order_management'
+    environment:
+      DB_HOST: jdbc:h2:file:./data/tickets
+      DB_USER: sa
+      DB_PASSWORD: password
+    ports:
+      - "8080:8080"
+#    depends_on:
+#      - mssql
+#    networks:
+#      - backend
+#  mssql:
+#    image: mcr.microsoft.com/mssql/server:2019-latest
+#    user: root
+#    ports:
+#      - "1433:1433"
+#    environment:
+#      ACCEPT_EULA: Y
+#      SA_PASSWORD: P@ssw0rd
+#    volumes:
+#      - ./repository/data:/var/opt/mssql/data
+#    networks:
+#      - backend
+#  db-init:
+#    image: mcr.microsoft.com/mssql/server:2019-latest
+#    network_mode: service:mssql
+#    command: bash -c 'until /opt/mssql-tools/bin/sqlcmd -U sa -P P@ssw0rd -Q "CREATE DATABASE order_management"; do echo retry && sleep 1; done'
+#    depends_on:
+#      - mssql
+#networks:
+#  backend:

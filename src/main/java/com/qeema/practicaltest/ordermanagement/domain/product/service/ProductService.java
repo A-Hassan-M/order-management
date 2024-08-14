@@ -1,16 +1,15 @@
 package com.qeema.practicaltest.ordermanagement.domain.product.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import com.qeema.practicaltest.ordermanagement.domain.exceptions.ResourceAlreadyExists;
-import com.qeema.practicaltest.ordermanagement.domain.exceptions.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.qeema.practicaltest.ordermanagement.domain.product.entities.Product;
 import com.qeema.practicaltest.ordermanagement.domain.order.entities.OrderProduct;
+import com.qeema.practicaltest.ordermanagement.domain.exceptions.ResourceAlreadyExists;
+import com.qeema.practicaltest.ordermanagement.domain.exceptions.ResourceNotFoundException;
 import com.qeema.practicaltest.ordermanagement.domain.product.repository.ProductRepository;
 
 @Slf4j

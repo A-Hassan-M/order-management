@@ -3,18 +3,18 @@ application:
         jwt:
             expiration-time: ${JWT_EXPIRATION:12000000000000000}
             secret-key: ${JWT_SECRET:3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b}
-        permittedUrls: /api/auth/**,/test
+        permittedUrls: /api/auth/**,/auth/**
         enabled: true
 spring:
     application:
         name: order-management
 #    datasource:
-#        url: ${DB_HOST:jdbc:sqlserver://mssql:1433;databaseName=events_reservation;encrypt=true;trustServerCertificate=true}
+#        url: ${DB_HOST:jdbc:sqlserver://mssql:1433;databaseName=order_management;encrypt=true;trustServerCertificate=true}
 #        username: ${DB_USER:sa}
 #        password: ${DB_PASSWORD:password}
 #        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     datasource:
-        url: ${DB_HOST:jdbc:h2:file:./data/tickets}
+        url: ${DB_HOST:jdbc:h2:mem:orders}
         username: ${DB_USER:sa}
         password: ${DB_USER:password}
         driver-class-name: org.h2.Driver

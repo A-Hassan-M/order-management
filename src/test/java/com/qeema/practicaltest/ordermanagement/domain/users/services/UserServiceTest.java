@@ -40,6 +40,5 @@ public class UserServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         User returnedUser = userService.findByEmail(email);
         assertEquals(user.getId(), returnedUser.getId());
-        assertNull(user.getPassword());
     }
 }

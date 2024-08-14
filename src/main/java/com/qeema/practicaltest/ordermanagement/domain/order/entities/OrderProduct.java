@@ -28,6 +28,15 @@ public class OrderProduct {
     private Double subtotal;
     @Transient
     private Product product;
+
+    public OrderProduct(Long productId, String productName, int quantity, Double pricePerUnit, Double subtotal) {
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.pricePerUnit = pricePerUnit;
+        this.subtotal = subtotal;
+    }
+
     public void setProductData(Product product) {
         this.product = product;
         this.productId = product.getId();
@@ -36,5 +45,18 @@ public class OrderProduct {
         if(quantity != 0){
             subtotal = pricePerUnit * quantity;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "OrderProduct{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", quantity=" + quantity +
+                ", pricePerUnit=" + pricePerUnit +
+                ", subtotal=" + subtotal +
+                ", product=" + product +
+                '}';
     }
 }

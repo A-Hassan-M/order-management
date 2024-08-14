@@ -36,7 +36,7 @@ public class ProductDelegateImpl implements ProductsApiDelegate {
     public ResponseEntity<ProductDto> addProduct(ProductDto productDTO) {
         Product product = productMapper.mapToEntity(productDTO);
         Product savedProduct = productService.saveProduct(product);
-        return ResponseEntity.ok(productMapper.mapToProductDto(savedProduct));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productMapper.mapToProductDto(savedProduct));
     }
 
     @Override
