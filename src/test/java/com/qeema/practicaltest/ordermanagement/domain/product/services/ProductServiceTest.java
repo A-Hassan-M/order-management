@@ -46,9 +46,7 @@ class ProductServiceTest {
     void testSaveProductThrowsResourceAlreadyExists() {
         Product product = new Product(1L, "Test Product", 10.0, 5);
         when(productRepository.existsByName(product.getName())).thenReturn(true);
-        assertThrows(ResourceAlreadyExists.class, () -> {
-            productService.saveProduct(product);
-        });
+        assertThrows(ResourceAlreadyExists.class, () -> productService.saveProduct(product));
         verify(productRepository, never()).save(product);
     }
 
@@ -70,9 +68,7 @@ class ProductServiceTest {
     void testUpdateProductThrowsResourceNotFoundException() {
         Product product = new Product(1L, "Non-Existing Product", 20.0, 5);
         when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> {
-            productService.updateProduct(product.getId(), product);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> productService.updateProduct(product.getId(), product));
         verify(productRepository, never()).save(product);
     }
 
@@ -89,9 +85,7 @@ class ProductServiceTest {
     @Test
     void testGetProductByIdThrowsResourceNotFoundException() {
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> {
-            productService.getProductById(1L);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> productService.getProductById(1L));
     }
 
     @Test
